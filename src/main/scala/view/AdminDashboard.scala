@@ -7,8 +7,10 @@ import scalafx.scene.layout.{BorderPane, HBox, VBox}
 import scalafx.stage.Stage
 import scalafx.collections.ObservableBuffer
 import scalafx.Includes._
+import scalafx.beans.property.StringProperty
 import model.FoodItem
 import repository.FoodRepository
+import java.time.format.DateTimeFormatter
 
 object AdminDashboard:
 
@@ -54,6 +56,14 @@ object AdminDashboard:
           text = "Category"
           cellValueFactory = _.value.categoryProperty.delegate
           prefWidth = 100
+          sortable = true
+        },
+        new TableColumn[FoodItem, String] {
+          text = "Date Added"
+          cellValueFactory = { data =>
+            StringProperty(data.value.dateAdded.format(DateTimeFormatter.ISO_DATE))
+          }
+          prefWidth = 120
           sortable = true
         }
       )
@@ -115,7 +125,7 @@ object AdminDashboard:
 
     val addButton = new Button("➕ Add Food")
     addButton.onAction = _ =>
-      AddFoodPopup.show { newFood =>
+      AddFoodDialog.show { newFood =>
         FoodRepository.insert(newFood)
         allFoods += newFood
         filteredFoods += newFood

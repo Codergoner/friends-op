@@ -83,6 +83,7 @@ object Main extends JFXApp3:
     stage = new JFXApp3.PrimaryStage:
       title = "Login"
       scene = new Scene(root, 400, 350)
+      icons += new Image(getClass.getResource("/images/login-icon.jpg").toString)
 
     // ✅ Then bind image size *after* stage is initialized
     backgroundView.fitWidth <== stage.width
