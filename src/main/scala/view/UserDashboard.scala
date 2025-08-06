@@ -11,6 +11,8 @@ import scalafx.scene.layout._
 import scalafx.stage.Stage
 import scalafx.scene.text.Font
 import scalafx.Includes._
+import scalafx.scene.control.DatePicker
+import java.time.LocalDate
 
 class UserDashboard extends Stage {
 
@@ -44,10 +46,15 @@ class UserDashboard extends Stage {
     val filterButton = new Button("Apply Filters")
     val resetButton = new Button("Reset")
 
+    val datePicker = new DatePicker(LocalDate.now)
+    val dateLabel = new Label()
+    dateLabel.text <== datePicker.valueProperty().asString("Selected date: %s")
+
     val filterBar = new VBox(10,
       new HBox(10, searchNameField),
       new HBox(10, new Label("Meal:"), mealTypeBox, new Label("Category:"), categoryBox),
       new HBox(10, searchCal, searchProtein, searchFat, searchCarbs),
+      new HBox(10, new Label("Date:"), datePicker, dateLabel),
       new HBox(10, filterButton, resetButton)
     ) {
       padding = Insets(10)

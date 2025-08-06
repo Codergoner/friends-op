@@ -4,13 +4,6 @@ import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.{BorderPane, HBox, VBox}
-import scalafx.stage.Stage
-import scalafx.collections.ObservableBuffer
-import scalafx.Includes._
-import scalafx.beans.property.StringProperty
-import model.FoodItem
-import repository.FoodRepository
-import java.time.format.DateTimeFormatter
 
 object AdminDashboard:
 
@@ -122,14 +115,6 @@ object AdminDashboard:
 
     applyFilterButton.onAction = _ => applyFilters()
     clearFilterButton.onAction = _ => clearFilters()
-
-    val addButton = new Button("➕ Add Food")
-    addButton.onAction = _ =>
-      AddFoodDialog.show { newFood =>
-        FoodRepository.insert(newFood)
-        allFoods += newFood
-        filteredFoods += newFood
-      }
 
     val editButton = new Button("✏️ Edit")
     editButton.onAction = _ =>
