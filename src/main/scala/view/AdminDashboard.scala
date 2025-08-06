@@ -4,11 +4,13 @@ import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.{BorderPane, HBox, VBox}
-import scalafx.stage.Stage
+import scalafx.stage.{Stage, Modality}
 import scalafx.collections.ObservableBuffer
 import scalafx.Includes._
 import model.FoodItem
 import repository.FoodRepository
+import scalafxml.core.FXMLLoader
+import controller.AddFoodDialogController
 
 object AdminDashboard:
 
@@ -115,11 +117,20 @@ object AdminDashboard:
 
     val addButton = new Button("➕ Add Food")
     addButton.onAction = _ =>
-      AddFoodPopup.show { newFood =>
+      val loader = new FXMLLoader(getClass.getResource("/addFoodDialog.fxml"))
+      val root = loader.load[javafx.scene.Parent]
+      val controller = loader.getController[AddFoodDialogController]
+      val dialog = new Stage:
+        title = "Add Food"
+        initModality(Modality.ApplicationModal)
+        scene = new Scene(root)
+      controller.dialogStage = dialog
+      controller.onAdd = { newFood =>
         FoodRepository.insert(newFood)
         allFoods += newFood
         filteredFoods += newFood
       }
+      dialog.showAndWait()
 
     val editButton = new Button("✏️ Edit")
     editButton.onAction = _ =>
