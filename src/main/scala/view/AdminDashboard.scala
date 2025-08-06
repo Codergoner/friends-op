@@ -4,13 +4,6 @@ import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.{BorderPane, HBox, VBox}
-import scalafx.stage.{Stage, Modality}
-import scalafx.collections.ObservableBuffer
-import scalafx.Includes._
-import model.FoodItem
-import repository.FoodRepository
-import scalafxml.core.FXMLLoader
-import controller.AddFoodDialogController
 
 object AdminDashboard:
 
@@ -56,6 +49,14 @@ object AdminDashboard:
           text = "Category"
           cellValueFactory = _.value.categoryProperty.delegate
           prefWidth = 100
+          sortable = true
+        },
+        new TableColumn[FoodItem, String] {
+          text = "Date Added"
+          cellValueFactory = { data =>
+            StringProperty(data.value.dateAdded.format(DateTimeFormatter.ISO_DATE))
+          }
+          prefWidth = 120
           sortable = true
         }
       )
@@ -114,23 +115,6 @@ object AdminDashboard:
 
     applyFilterButton.onAction = _ => applyFilters()
     clearFilterButton.onAction = _ => clearFilters()
-
-    val addButton = new Button("➕ Add Food")
-    addButton.onAction = _ =>
-      val loader = new FXMLLoader(getClass.getResource("/addFoodDialog.fxml"))
-      val root = loader.load[javafx.scene.Parent]
-      val controller = loader.getController[AddFoodDialogController]
-      val dialog = new Stage:
-        title = "Add Food"
-        initModality(Modality.ApplicationModal)
-        scene = new Scene(root)
-      controller.dialogStage = dialog
-      controller.onAdd = { newFood =>
-        FoodRepository.insert(newFood)
-        allFoods += newFood
-        filteredFoods += newFood
-      }
-      dialog.showAndWait()
 
     val editButton = new Button("✏️ Edit")
     editButton.onAction = _ =>

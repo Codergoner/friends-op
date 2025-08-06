@@ -2,13 +2,15 @@ package repository
 
 import model.FoodItem
 import scalikejdbc._
+import java.time.LocalDate
+import util.DateExtensions.*
 
 object FoodRepository {
 
   // Step 1: Setup the DB (H2)
   def setup(): Unit =
-    Class.forName("org.h2.Driver")
-    ConnectionPool.singleton("jdbc:h2:file:./nutrition.db", "user", "pass")
+    Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
+    ConnectionPool.singleton("jdbc:derby:nutrition.db;create=true", "", "")
 
     // Step 2: Create table if it doesn't exist
     DB autoCommit { implicit session =>
@@ -20,7 +22,8 @@ object FoodRepository {
           protein double,
           fat double,
           carbs double,
-          category varchar(100)
+          category varchar(100),
+          date_added date
         )
       """.execute.apply()
     }
@@ -39,7 +42,8 @@ object FoodRepository {
             protein = rs.double("protein"),
             fat = rs.double("fat"),
             carbs = rs.double("carbs"),
-            category = rs.string("category")
+            category = rs.string("category"),
+            dateAdded = rs.date("date_added").toLocalDateSafe
           )
         }.list.apply()
     }
@@ -48,8 +52,8 @@ object FoodRepository {
   def insert(food: FoodItem): Unit =
     DB autoCommit { implicit session =>
       sql"""
-        insert into food_items (name, calories, protein, fat, carbs, category)
-        values (${food.name}, ${food.calories}, ${food.protein}, ${food.fat}, ${food.carbs}, ${food.category})
+        insert into food_items (name, calories, protein, fat, carbs, category, date_added)
+        values (${food.name}, ${food.calories}, ${food.protein}, ${food.fat}, ${food.carbs}, ${food.category}, ${food.dateAdded.toSqlDate})
       """.update.apply()
     }
 
@@ -62,7 +66,8 @@ object FoodRepository {
             protein = ${food.protein},
             fat = ${food.fat},
             carbs = ${food.carbs},
-            category = ${food.category}
+            category = ${food.category},
+            date_added = ${food.dateAdded.toSqlDate}
         where id = ${food.id}
       """.update.apply()
     }

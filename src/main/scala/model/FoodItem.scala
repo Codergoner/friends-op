@@ -2,6 +2,7 @@
 package model
 
 import scalafx.beans.property._
+import java.time.LocalDate
 
 case class FoodItem(
                      id: Long,
@@ -10,7 +11,8 @@ case class FoodItem(
                      protein: Double,
                      fat: Double,
                      carbs: Double,
-                     category: String
+                     category: String,
+                     dateAdded: LocalDate
                    ):
   val nameProperty = StringProperty(name)
   val caloriesProperty = IntegerProperty(calories)
@@ -18,3 +20,4 @@ case class FoodItem(
   val fatProperty = DoubleProperty(fat)
   val carbsProperty = DoubleProperty(carbs)
   val categoryProperty = StringProperty(category)
+  val dateAddedProperty = ObjectProperty(dateAdded)

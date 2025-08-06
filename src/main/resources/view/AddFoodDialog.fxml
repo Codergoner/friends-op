@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" spacing="10" alignment="CENTER" fx:controller="view.AddFoodDialogController">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+    <children>
+        <Label text="%addFood.title" />
+        <TextField fx:id="nameField" promptText="%addFood.name" />
+        <TextField fx:id="caloriesField" promptText="%addFood.calories" />
+        <TextField fx:id="proteinField" promptText="%addFood.protein" />
+        <TextField fx:id="fatField" promptText="%addFood.fat" />
+        <TextField fx:id="carbsField" promptText="%addFood.carbs" />
+        <ComboBox fx:id="categoryBox" />
+        <Label text="%addFood.date" />
+        <DatePicker fx:id="datePicker" />
+        <HBox spacing="10" alignment="CENTER">
+            <children>
+                <Button fx:id="addButton" text="%addFood.add" onAction="#handleSave" />
+                <Button text="%addFood.cancel" onAction="#handleCancel" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
+
